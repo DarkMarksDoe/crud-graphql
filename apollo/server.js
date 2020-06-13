@@ -77,6 +77,7 @@ const schema = makeExecutableSchema({
 
 const server = new ApolloServer({
     schema: schema,
+    subscriptions: false,
 });
 
 server.listen().then(({ url }) => {
