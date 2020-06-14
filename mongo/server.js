@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose"); //* Object Data Modelin (ODM)
 const bodyParser = require("body-parser");
+const auth = require("./libs/auth");
+
 
 //* const { graphiqlExpress, graphqlExpress } = require("graphql-server-express");
 const { ApolloServer } = require("apollo-server-express");
@@ -43,7 +45,8 @@ const resolver = {};
 
 const server = new ApolloServer({
     typeDefs: [typeDefs, courseTypeDefs, userTypeDefs],
-    resolvers: merge(resolver, courseResolvers, userResolvers)
+    resolvers: merge(resolver, courseResolvers, userResolvers),
+    context: auth
 });
 server.applyMiddleware({ app: app });
 

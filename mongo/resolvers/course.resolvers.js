@@ -3,7 +3,8 @@ const User = require("../models/user");
 
 module.exports = {
     Query: {
-        async getCourses(obj, { page, limit }) {
+        async getCourses(obj, { page, limit }, context) {
+            console.log(context);
             let courses = Course.find();
             if (page !== undefined) {
                 courses = courses.limit(limit).skip((page - 1) * limit, page * limit);
@@ -17,7 +18,8 @@ module.exports = {
         },
     },
     Mutation: {
-        async addCourse(obj, { input, user }) {
+        async addCourse(obj, { input, user }, context) {
+            //! if (!context || !context.currentUser) return null;
             const userObj = await User.findById(user);
             const course = new Course({...input, user });
             await course.save();
@@ -44,6 +46,6 @@ module.exports = {
     Course: {
         async user(c) {
             return await User.findById(c.user);
-        }
-    }
+        },
+    },
 };
