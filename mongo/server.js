@@ -2,8 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose"); //* Object Data Modelin (ODM)
 const bodyParser = require("body-parser");
 
-const { graphiqlExpress, graphqlExpress } = require("graphql-server-express");
-const { makeExecutableSchema } = require("graphql-tools");
+//* const { graphiqlExpress, graphqlExpress } = require("graphql-server-express");
+const { ApolloServer } = require("apollo-server-express");
+
 const { merge } = require("lodash");
 
 //* Courses
@@ -37,14 +38,14 @@ const typeDefs = `
     `;
 
 const resolver = {};
+//* app.use("/graphql", bodyParser.json(), graphqlExpress({ schema: schema }));
+//* app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
 
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
     typeDefs: [typeDefs, courseTypeDefs, userTypeDefs],
-    resolvers: merge(resolver, courseResolvers, userResolvers),
+    resolvers: merge(resolver, courseResolvers, userResolvers)
 });
-
-app.use("/graphql", bodyParser.json(), graphqlExpress({ schema: schema }));
-app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
+server.applyMiddleware({ app: app });
 
 app.listen(8080, function() {
     console.log("Server started");
