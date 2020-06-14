@@ -1,7 +1,6 @@
-const { model } = require("mongoose");
-const courses = [];
 const Course = require("../models/course");
-const { findById } = require("../models/course");
+const User = require("../models/user");
+
 module.exports = {
     Query: {
         async getCourses(obj, { page, limit }) {
@@ -13,14 +12,17 @@ module.exports = {
         },
         async getCourse(obj, { id }) {
             console.log(`Course id: ${id}`);
-            const course = await Course.findById(id);
+            const course = await Course.findById(user);
             return course;
         },
     },
     Mutation: {
-        async addCourse(obj, { input }) {
-            const course = new Course(input);
+        async addCourse(obj, { input, user }) {
+            const userObj = await User.findById(user);
+            const course = new Course({...input, user });
             await course.save();
+            userObj.courses.push(course);
+            await userObj.save();
             return course;
         },
         async updateCourse(obj, { id, input }) {
@@ -39,4 +41,9 @@ module.exports = {
             };
         },
     },
+    Course: {
+        async user(c) {
+            return await User.findById(c.user);
+        }
+    }
 };

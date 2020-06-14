@@ -11,11 +11,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "bcrypt": "^5.0.0",
         "body-parser": "^1.19.0",
         "express": "^4.17.1",
         "graphql": "^15.1.0",
         "graphql-server-express": "^1.4.1",
         "graphql-tools": "^6.0.9",
+        "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
         "mongoose": "^5.9.18"
     }
